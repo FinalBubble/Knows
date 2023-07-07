@@ -1,6 +1,7 @@
 package org.finalbubble.knows.portal.controller;
 
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author finalbubble.org
@@ -25,8 +26,22 @@ public class UserController {
     // ("/demo")也是规定访问它的路径,想要访问下面的方法最终的要求是
     // 以get方法请求路径localhost:8080/v1/users/demo
     @GetMapping("/demo")
-    public String demo(){
+    public String demo() {
         return "hello demo!";
+    }
+
+    @GetMapping("/ask")
+    // 规定当前控制器方法需要特殊授权才能访问
+    // 其他控制方法登录就能访问,添加下面注解指定特殊权限
+    @PreAuthorize("hasAuthority('answer')")
+    public String ask() {
+        return "可以开始回答问题了!";
+    }
+
+    @GetMapping("/delete")
+    @PreAuthorize("hasAuthority('remove')")
+    public String delete() {
+        return "可以开始删除了!";
     }
 
 }
